@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E-Saba - Student Application System</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.header {
+  background: #90e3ee;
+  color: rgb(73, 58, 58);
+  padding: 15px;
+  text-align: center;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+/* LOGIN BUTTON */
+.login-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 18px;
+  background-color: #0b0be2;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.login-btn:hover {
+  background-color: #0783e2;
+}
+
+/* NAV */
+nav {
+  background: #4edde2;
+  padding: 10px;
+  text-align: center;
+}
+
+nav a {
+  color: black;
+  margin: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* BANNER */
+.banner {
+  flex: 1;
+  height: 400px;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background-image: url("que2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* BUTTONS */
+.banner button {
+  padding: 8px 15px;
+  margin: 5px auto;
+  border: none;
+  background: rgb(15, 221, 211);
+  cursor: pointer;
+  width: 180px;
+}
+
+/* FOOTER */
+footer {
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+.social a {
+  font-size: 25px;
+  margin: 10px;
+  color: rgb(8, 73, 192);
+  background: rgb(240, 234, 239);
+  padding: 10px;
+  border-radius: 50%;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN BUTTON -->
+<a href="login.html" class="login-btn">Login</a>
+
+<header class="header">
+  <div class="header-content">
+    <img src="logo.png" alt="E-Saba Logo" class="logo">
+    <h2>E-Saba</h2>
+  </div>
+</header>
+
+<nav>
+  <a href="#">Home</a>
+  <a href="contact.html">Contact</a>
+  <a href="apply.html">Apply</a>
+  <a href="about.html">About</a>
+</nav>
+
+<div class="banner">
+  <h1 id="mainText"></h1>
+
+  <p>Apply easily to your dream school online</p>
+
+  <button onclick="applyNow()">Apply Now</button>
+
+  <button onclick="switchLang()">🌐 Change Language</button>
+</div>
+
+<footer>
+  <div class="social">
+
+    <a href="https://facebook.com" target="_blank">
+      <i class="fab fa-facebook"></i>
+    </a>
+
+    <a href="https://instagram.com" target="_blank">
+      <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="mailto:example@gmail.com">
+      <i class="fas fa-envelope"></i>
+    </a>
+
+  </div>
+
+  © 2026 E-Saba System
+</footer>
+
+<script>
+
+const texts = {
+  rw: {
+    main: "Saba ikigo utavuye aho uri"
+  },
+
+  en: {
+    main: "Apply to a school from home"
+  }
+};
+
+let currentLang = "en";
+
+function updateText() {
+  document.getElementById("mainText").innerText =
+  texts[currentLang].main;
+}
+
+function switchLang() {
+  currentLang =
+  currentLang === "en" ? "rw" : "en";
+
+  updateText();
+}
+
+function applyNow() {
+  alert("Please login first");
+}
+
+updateText();
+
+</script>
+
+</body>
+</html>

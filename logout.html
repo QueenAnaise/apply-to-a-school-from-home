@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E-Saba Full Application</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #f5f1f3, #faf8fc, #f3f4f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: white;
+  width: 420px;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+h2 {
+  color: #6a0dad;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #ff4da6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ffd700;
+  color: black;
+}
+
+#result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ✅ LOGOUT HEPFO */
+.logout-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: #73e4ec;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background: #79cae2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Student Application</h2>
+
+  <!-- CATEGORY -->
+  <select id="type" onchange="changeForm()">
+    <option value="">-- Select Category --</option>
+    <option value="new">New Comer</option>
+    <option value="local">Local Classer</option>
+  </select>
+
+  <!-- SCHOOL -->
+  <select id="school">
+    <option value="">-- Select School --</option>
+    <option>GS St Joseph</option>
+    <option>Green Hills Academy</option>
+    <option>Lycee de Kigali</option>
+    <option>FAWE Girls School</option>
+    <option>Rwanda Coding Academy</option>
+    <option>Petit Seminaire Virgo Fidelis</option>
+    <option>College Saint Andre</option>
+    <option>GS Remera Rukoma</option>
+    <option>GS Nyamirambo</option>
+    <option>GS Kimisagara</option>
+    <option>GS Kacyiru</option>
+    <option>GS Gisozi</option>
+    <option>GS Kagarama</option>
+    <option>GS Kanombe</option>
+    <option>GS Ndera</option>
+    <option>GS Masaka</option>
+    <option>GS Rwamagana</option>
+    <option>GS Kibungo</option>
+    <option>GS Nyagatare</option>
+    <option>GS Gatsibo</option>
+    <option>GS Byumba</option>
+    <option>GS Musanze</option>
+    <option>GS Burera</option>
+    <option>GS Rubavu</option>
+    <option>GS Nyabihu</option>
+    <option>GS Karongi</option>
+    <option>GS Rutsiro</option>
+    <option>GS Ngororero</option>
+    <option>GS Muhanga</option>
+    <option>GS Kamonyi</option>
+    <option>GS Ruhango</option>
+    <option>GS Huye</option>
+    <option>GS Nyanza</option>
+    <option>GS Gisagara</option>
+    <option>GS Nyamagabe</option>
+    <option>GS Nyaruguru</option>
+    <option>GS Rusizi</option>
+    <option>GS Nyamasheke</option>
+    <option>GS Kirehe</option>
+    <option>GS Bugesera</option>
+    <option>GS Rilima</option>
+    <option>GS Save</option>
+    <option>GS Zaza</option>
+    <option>GS Shyogwe</option>
+    <option>GS Kabgayi</option>
+    <option>GS Cyanika</option>
+    <option>GS Gahini</option>
+    <option>GS Kibogora</option>
+    <option>GS Mugina</option>
+    <option>GS Rutongo</option>
+    <option>lycee de kicukiro Apade</option>
+  </select>
+
+  <!-- NAME -->
+  <input type="text" id="name" placeholder="Full Name">
+
+  <!-- NEW -->
+  <div id="newFields" class="hidden">
+    <select id="level">
+      <option value="">-- Select Level --</option>
+      <option value="S1">S1</option>
+      <option value="S4">S4</option>
+    </select>
+
+    <input type="number" id="newMarks" placeholder="national exam result (0-100)">
+  </div>
+
+  <!-- LOCAL -->
+  <div id="localFields" class="hidden">
+    <input type="number" id="marks" placeholder="Marks (0-100)">
+    <input type="number" id="discipline" placeholder="Discipline (0-100)">
+  </div>
+
+  <!-- SUBMIT -->
+  <button onclick="apply()">Submit Application</button>
+
+  <!-- ✅ LOGOUT HANO HEPFO -->
+  <button onclick="logout()" class="logout-btn">Logout</button>
+
+  <p id="result"></p>
+</div>
+
+<script>
+// 🔐 PROTECT
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  alert("Please login first");
+  window.location.href = "login.html";
+}
+
+// 🔓 LOGOUT
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  alert("Logged out successfully");
+  window.location.href = "login.html";
+}
+
+function changeForm() {
+  let type = document.getElementById("type").value;
+
+  document.getElementById("newFields").classList.add("hidden");
+  document.getElementById("localFields").classList.add("hidden");
+
+  if (type === "new") {
+    document.getElementById("newFields").classList.remove("hidden");
+  } else if (type === "local") {
+    document.getElementById("localFields").classList.remove("hidden");
+  }
+}
+
+function apply() {
+  let type = document.getElementById("type").value;
+  let name = document.getElementById("name").value;
+  let school = document.getElementById("school").value;
+  let result = document.getElementById("result");
+
+  if (!type || !name || !school) {
+    result.innerHTML = "❌ Fill all required fields";
+    result.style.color = "red";
+    return;
+  }
+
+  if (type === "new") {
+    let level = document.getElementById("level").value;
+    let marks = parseInt(document.getElementById("newMarks").value);
+
+    if (!level || !marks) {
+      result.innerHTML = "❌ Fill all fields";
+      result.style.color = "red";
+      return;
+    }
+
+    if (level === "S4") {
+      result.innerHTML = marks >= 65 
+        ? "✅ Accepted to S4 at " + school + " 🎉"
+        : "❌ Not accepted (S4 requires 65+)";
+    }
+
+    if (level === "S1") {
+      result.innerHTML = marks >= 85 
+        ? "✅ Accepted to S1 at " + school + " 🎉"
+        : "❌ Not accepted (S1 requires 85+)";
+    }
+
+    result.style.color = result.innerHTML.includes("✅") ? "green" : "red";
+  }
+
+  if (type === "local") {
+    let marks = parseInt(document.getElementById("marks").value);
+    let discipline = parseInt(document.getElementById("discipline").value);
+
+    if (!marks || !discipline) {
+      result.innerHTML = "❌ Fill all fields";
+      result.style.color = "red";
+      return;
+    }
+
+    if (discipline < 50) {
+      result.innerHTML = "❌ Not accepted (low discipline)";
+    } else if (marks < 70) {
+      result.innerHTML = "❌ Not accepted (low marks)";
+    } else {
+      result.innerHTML = "✅ Accepted at " + school + " 🎉";
+    }
+
+    result.style.color = result.innerHTML.includes("✅") ? "green" : "red";
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E-Saba Full Application</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #f5f1f3, #faf8fc, #f3f4f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: white;
+  width: 420px;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+}
+
+h2 {
+  color: #6a0dad;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #ff4da6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #ffd700;
+  color: black;
+}
+
+.add-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: auto;
+  padding: 8px 12px;
+  background: #4CAF50;
+  font-size: 12px;
+}
+
+.print-btn {
+  margin-top: 10px;
+  background: #333;
+}
+
+#result {
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: left;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+  border-left: 5px solid #6a0dad;
+}
+
+.hidden { display: none; }
+
+.logout-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: #db1515;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <button class="add-btn" onclick="addSchool()">+ Add school</button>
+
+  <h2>Student Application</h2>
+
+  <!-- CATEGORY -->
+  <select id="type" onchange="changeForm()">
+    <option value="">-- Select Category --</option>
+    <option value="new">New Comer</option>
+    <option value="local">Local Classer</option>
+  </select>
+
+  <!-- SCHOOL -->
+  <select id="school">
+    <option value="">-- Select School --</option>
+  </select>
+
+  <!-- NAME -->
+  <input type="text" id="name" placeholder="Full Name">
+
+  <!-- NEW -->
+  <div id="newFields" class="hidden">
+    <select id="level">
+      <option value="">-- Select Level --</option>
+      <option value="S1">S1</option>
+      <option value="S4">S4</option>
+    </select>
+    <input type="number" id="newMarks" placeholder="National exam result">
+  </div>
+
+  <!-- LOCAL -->
+  <div id="localFields" class="hidden">
+    <input type="number" id="marks" placeholder="Marks">
+    <input type="number" id="discipline" placeholder="Discipline">
+  </div>
+
+  <!-- BUTTONS -->
+  <button onclick="apply()">Submit Application</button>
+  <button class="print-btn" onclick="printResult()">Print Result</button>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+
+// LOGIN CHECK
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "login.html";
+}
+
+// LOAD SCHOOLS (FIXED)
+function loadSchools() {
+  let select = document.getElementById("school");
+
+  let schools = [
+    "GS St Joseph",
+    "Green Hills Academy",
+    "Lycee de Kigali",
+    "FAWE Girls School",
+    "Rwanda Coding Academy",
+    "Petit Seminaire Virgo Fidelis",
+    "College Saint Andre",
+    "GS Remera Rukoma",
+    "GS Nyamirambo",
+    "GS Kimisagara",
+    "GS Kacyiru",
+    "GS Gisozi",
+    "GS Kagarama",
+    "GS Kanombe",
+    "GS Ndera",
+    "GS Masaka",
+    "GS Rwamagana",
+    "GS Kibungo",
+    "GS Nyagatare",
+    "GS Musanze",
+    "GS Rubavu",
+    "GS Huye",
+    "GS Rusizi",
+    "GS Bugesera",
+    "King David Academy",
+    "Wellspring Academy",
+    "International School of Kigali",
+    "Hope Academy Kigali"
+  ];
+
+  select.innerHTML = "<option value=''>-- Select School --</option>";
+
+  schools.forEach(s => {
+    let opt = document.createElement("option");
+    opt.textContent = s;
+    select.appendChild(opt);
+  });
+}
+
+// ADD SCHOOL
+function addSchool() {
+  let name = prompt("Enter school name");
+  if (!name) return;
+
+  let select = document.getElementById("school");
+  let exists = false;
+
+  for (let i = 0; i < select.options.length; i++) {
+    if (select.options[i].text === name) {
+      exists = true;
+      break;
+    }
+  }
+
+  if (exists) {
+    alert("School already exists");
+    return;
+  }
+
+  let option = document.createElement("option");
+  option.textContent = name;
+  select.appendChild(option);
+}
+
+// FORM SWITCH
+function changeForm() {
+  document.getElementById("newFields").classList.add("hidden");
+  document.getElementById("localFields").classList.add("hidden");
+
+  if (type.value === "new") newFields.classList.remove("hidden");
+  if (type.value === "local") localFields.classList.remove("hidden");
+}
+
+// APPLY
+function apply() {
+  let name = document.getElementById("name").value;
+  let school = document.getElementById("school").value;
+  let typeVal = document.getElementById("type").value;
+
+  let now = new Date();
+  let date = now.toLocaleDateString();
+  let year = now.getFullYear();
+
+  let result = document.getElementById("result");
+
+  if (!name || !school || !typeVal) {
+    result.innerHTML = "❌ Fill all fields";
+    result.style.color = "red";
+    return;
+  }
+
+  let status = "";
+  let marks = 0;
+
+  if (typeVal === "new") {
+    let level = document.getElementById("level").value;
+    marks = parseInt(document.getElementById("newMarks").value);
+
+    if ((level === "S4" && marks >= 65) || (level === "S1" && marks >= 85)) {
+      status = "ACCEPTED";
+    } else {
+      status = "REJECTED";
+    }
+  }
+
+  if (typeVal === "local") {
+    let m = parseInt(document.getElementById("marks").value);
+    let d = parseInt(document.getElementById("discipline").value);
+
+    marks = m;
+
+    if (m >= 70 && d >= 50) {
+      status = "ACCEPTED";
+    } else {
+      status = "REJECTED";
+    }
+  }
+
+  result.innerHTML = `
+     Name: ${name}<br>
+     School: ${school}<br>
+     Marks: ${marks}<br>
+     Date: ${date}<br>
+     Year: ${year}<br>
+     Status: <b>${status}</b>
+  `;
+
+  result.style.color = status === "ACCEPTED" ? "green" : "red";
+}
+
+// PRINT
+function printResult() {
+  let content = document.getElementById("result").innerHTML;
+  if (!content) return alert("No result");
+
+  let win = window.open("", "", "width=600,height=400");
+  win.document.write("<h2>Application Result</h2>");
+  win.document.write(content);
+  win.print();
+}
+
+// LOGOUT
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  window.location.href = "login.html";
+}
+
+// INIT
+loadSchools();
+
+</script>
+
+</body>
+</html>
